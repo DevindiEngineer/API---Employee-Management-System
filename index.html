@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="banner">
+        <img src="img/employee-management-blue-banner-team-2557x550.png" alt="">
+
+        <h1 class="title">
+            Employee<br>
+            Management<br>
+            System
+        </h1>
+    </div>
+
+    <div>
+        <h2>Employee Details Form</h2>
+
+        <div style="text-align:center;">
+            <button type="button" style="color: rgb(225, 225, 235); background-color: rgb(167, 23, 23);"
+                onclick="resetForm()" id="reset-btn">Reset Data
+            </button>
+        </div>
+
+        <form>
+
+            <!-- first raw-->
+            <div class="form-row">
+                <div class="field">
+                    <label for="empName">Employee Name</label>
+                    <input type="text" placeholder="Full Name" id="empName" autocomplete="off">
+                </div>
+
+
+                <div class="field">
+                    <label for="email">E-mail</label>
+                    <input type="email" placeholder="Email Address" id="email" autocomplete="off">
+                </div>
+
+                <div class="field">
+                    <label for="TP">Phone</label>
+                    <input type="tel" placeholder="07" id="TP" autocomplete="off">
+                </div>
+            </div>
+
+            <!-- second raw-->
+            <div class="form-row">
+                <div class="field">
+                    <label for="gender">Gender</label>
+                    <select name="" id="gender">
+                        <option value="">Choose</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                </div>
+
+
+                <div class="field">
+                    <label for="DOJ">Date of Joining</label>
+                    <input type="date" placeholder="yyyy-mm-dd" id="DOJ">
+                </div>
+
+
+                <div class="field">
+                    <label for="departments">Department</label>
+                    <select name="" id="departments">
+                        <option value="">Select Department</option>
+                        <option value="Product & Engineering">Product & Engineering</option>
+                        <option value="Sales & Marketing">Sales & Marketing</option>
+                        <option value="Finance & Accounting">Finance & Accounting</option>
+                        <option value="Operations & HR">Operations & HR</option>
+                        <option value="Legal, Security & Compliance">Legal, Security & Compliance</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- third raw-->
+            <div class="form-row">
+                <div class="field">
+                    <label for="designations">Designation</label>
+                    <select id="designations">
+                        <option value="">Select Designation</option>
+                    </select>
+                </div>
+
+
+                <div class="field">
+                    <label for="types">Employee Type</label>
+                    <select name="" id="types">
+                        <option value="">Select Type</option>
+                        <option value="Trainee/Intern">Trainee/Intern</option>
+                        <option value="Contract">Contract</option>
+                        <option value="Permanent">Permanent</option>
+                    </select>
+                </div>
+
+
+                <div class="field">
+                    <label for="salary">Monthly Salary</label>
+                    <input type="number" id="salary" placeholder="Rs." autocomplete="off">
+                </div>
+            </div>
+
+            <div style="text-align:center;">
+                <button type="button" style="color: rgb(225, 225, 235); background-color: rgb(9, 9, 75);"
+                    onclick="saveEmployee()" id="saveButton">Save
+                    Employee</button>
+            </div>
+
+            <div id="successBanner"></div>
+
+        </form>
+
+    </div>
+
+    <h2>Employee Details</h2>
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h3 id="totalEmployees">0</h3>
+            <p>Total Employees</p>
+        </div>
+
+        <div class="card">
+            <h3 id="totalDepartments">0</h3>
+            <p>Total Departments</p>
+        </div>
+
+        <div class="card">
+            <h3 id="permanentEmployees">0</h3>
+            <p>Permanent Employees</p>
+        </div>
+
+        <div class="card">
+            <h3 id="contractEmployees">0</h3>
+            <p>Contract Employees</p>
+        </div>
+
+        <div class="card">
+            <h3 id="traineeEmployees">0</h3>
+            <p>Trainees / Interns</p>
+        </div>
+
+        <div class="card">
+            <h3 id="averageSalary">0</h3>
+            <p>Average Salary</p>
+        </div>
+
+    </div>
+
+    <div class="filter-panel">
+
+        <div class="filter-field">
+            <label>Search Employee</label>
+
+            <input type="text" id="searchEmployee" placeholder="Search by name or email" oninput="applyFilters()">
+        </div>
+
+        <div class="filter-field">
+            <label>Department</label>
+
+            <select id="filterDepartment" onchange="applyFilters()">
+                <option value="">All Departments</option>
+                <option value="Product & Engineering">
+                    Product & Engineering
+                </option>
+                <option value="Sales & Marketing">
+                    Sales & Marketing
+                </option>
+                <option value="Finance & Accounting">
+                    Finance & Accounting
+                </option>
+                <option value="Operations & HR">
+                    Operations & HR
+                </option>
+                <option value="Legal, Security & Compliance">
+                    Legal, Security & Compliance
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-field">
+            <label>Employee Type</label>
+
+            <select id="filterType" onchange="applyFilters()">
+                <option value="">All Employee Types</option>
+                <option value="Permanent">Permanent</option>
+                <option value="Contract">Contract</option>
+                <option value="Trainee/Intern">Trainee/Intern</option>
+            </select>
+        </div>
+
+        <button type="button" class="clear-filter-btn" onclick="clearFilters()">
+            Clear Filters
+        </button>
+
+    </div>
+
+    <div class="table-container">
+        <table border="2" width="100%" style="color: rgb(9, 9, 75); background-color: rgb(207, 223, 238);">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Gender</th>
+                    <th>Date of Joining</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Type</th>
+                    <th>Salary (Rs.)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="employeeTableBody">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/dummyData.js"></script>
+</body>
+
+</html>

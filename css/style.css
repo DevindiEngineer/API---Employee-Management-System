@@ -1,0 +1,453 @@
+/* ==========================================================
+   Employee Dashboard - Cleaned & Fixed Stylesheet
+   ========================================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: rgb(164, 201, 225);
+    padding-bottom: 80px;
+}
+
+/* ---------- Headings ---------- */
+h1 {
+    color: rgb(14, 14, 80);
+    font-size: 100px;
+}
+
+h2 {
+    color: rgb(14, 14, 80);
+    font-size: 40px;
+    text-align: center;
+}
+
+/* ---------- Banner ---------- */
+.banner {
+    position: relative;
+}
+
+.banner p {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+.title {
+    position: absolute;
+    top: 35%;
+    left: 100px;
+    transform: translateY(-50%);
+    text-align: left;
+    color: rgb(76, 37, 248);
+}
+
+.banner h1 {
+    color: #2915db;
+    text-shadow:
+        0 0 5px #00ffff,
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 40px #00ffff;
+}
+
+/* ---------- Remove number input arrows ---------- */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* ---------- Form ---------- */
+form {
+    width: 90%;
+    min-height: 400px;
+    height: auto;
+    margin: 30px auto;
+    padding: 40px;
+    background: rgb(194, 220, 232);
+    border: 3px solid navy;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+    color: rgb(14, 14, 80);
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 380px;
+}
+
+.field label {
+    width: 150px;
+    min-width: 150px;
+    white-space: nowrap;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.field input,
+.field select {
+    width: 220px;
+    height: 45px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    padding-left: 10px;
+    box-sizing: border-box;
+}
+
+.form-header {
+    width: 90%;
+    margin: 20px auto;
+    position: relative;
+}
+
+.form-header h2 {
+    text-align: center;
+}
+
+/* ---------- Buttons ---------- */
+button {
+    padding: 15px 35px;
+    font-size: 22px;
+    background: navy;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2915db;
+}
+
+/* ---------- Success banner ---------- */
+#successBanner {
+    display: none;
+    width: 50%;
+    margin: 20px auto;
+    background: #ffffff;
+    color: navy;
+    border: 2px solid navy;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* ---------- Table ---------- */
+.table-container {
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: auto;
+    table-layout: auto;
+}
+
+th {
+    background-color: navy;
+    color: white;
+    padding: 22px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+td {
+    font-size: 22px;
+    padding: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #dceeff;
+}
+
+.action-cell {
+    text-align: center;
+    vertical-align: middle;
+    width: 140px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+    width: 100px;
+    height: 35px;
+    margin: 3px;
+    padding: 0;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: #0d6efd;
+}
+
+.delete-btn {
+    background: #dc3545;
+}
+
+/* ---------- Department colours ---------- */
+.department-cell {
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+td.department-cell.eng-row{
+    background-color:#b8abe9 !important;
+}
+
+td.department-cell.sales-row{
+    background-color:#94df9a !important;
+}
+
+td.department-cell.finance-row{
+    background-color:#e0c859 !important;
+}
+
+td.department-cell.hr-row{
+    background-color:#ebb5d9 !important;
+}
+
+td.department-cell.legal-row{
+    background-color:#ec8484 !important;
+}
+
+
+/* ---------- Dashboard cards ---------- */
+.dashboard {
+    width: 90%;
+    margin: 30px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card {
+    flex: 1;
+    background: rgb(8, 6, 77);
+    padding: 10px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+    font-size: 35px;
+    color: rgb(228, 219, 219);
+    margin: 0;
+}
+
+.card p {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #dceeff;
+}
+
+.dashboard-card {
+    transition: transform 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+/* ---------- Empty state ---------- */
+.no-results {
+    padding: 30px;
+    color: #555;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ---------- Filter panel ---------- */
+.filter-panel {
+    width: 90%;
+    margin: 25px auto;
+    padding: 25px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 25px;
+    align-items: end;
+    box-sizing: border-box;
+    background-color: rgb(194, 220, 232);
+    border: 2px solid navy;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+
+.filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-field label {
+    color: rgb(14, 14, 80);
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.filter-field input,
+.filter-field select {
+    width: 100%;
+    height: 45px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    font-size: 18px;
+    border: 1px solid gray;
+    border-radius: 8px;
+}
+
+.filter-button-field {
+    display: flex;
+    align-items: end;
+}
+
+.clear-filter-btn {
+    height: 45px;
+    padding: 0 20px;
+    background-color: #c02f2f;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.clear-filter-btn:hover {
+    background-color: #581010;
+}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+
+/* Tablet */
+@media screen and (max-width: 900px) {
+    .filter-panel {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 40px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    .banner img {
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .title {
+        left: 20px;
+        top: 50%;
+    }
+
+    form {
+        height: auto;
+        padding: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .field {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .field label {
+        width: 100%;
+        min-width: 0;
+        white-space: normal;
+    }
+
+    .field input,
+    .field select {
+        width: 100%;
+    }
+
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .filter-panel {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    #saveButton,
+    #reset-btn,
+    .clear-filter-btn {
+        width: 100%;
+    }
+}
+
+/* Small mobile */
+@media screen and (max-width: 600px) {
+    .filter-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .clear-filter-btn {
+        width: 100%;
+    }
+}
