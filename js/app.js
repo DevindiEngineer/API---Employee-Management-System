@@ -1,5 +1,14 @@
 const API_URL = "https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
 
+let employees = [];
+
+async function loadEmployees() {
+    const response = await fetch(API_URL);
+    employees = await response.json();
+    displayEmployees();
+    updateDashboard();
+}
+
 let department = document.getElementById("departments");
 let designation = document.getElementById("designations");
 
@@ -192,8 +201,7 @@ function saveEmployee() {
 
 function displayEmployees(employeesToDisplay = null) {
 
-    let allEmployees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+    let allEmployees = employees;
 
     let employees;
 
@@ -299,8 +307,7 @@ function displayEmployees(employeesToDisplay = null) {
 }
 
 
-displayEmployees();
-updateDashboard();
+loadEmployees();
 
 function updateDashboard() {
 
@@ -374,8 +381,7 @@ function deleteEmployee(index) {
             JSON.stringify(employees)
         );
 
-        displayEmployees();
-        updateDashboard();   // ← add this
+        loadEmployees();
     }
 }
 
