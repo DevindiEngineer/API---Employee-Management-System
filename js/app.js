@@ -1,15 +1,15 @@
 const API_URL =
-    "https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
+"https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
 
-let employees = [];
+let employeesData = [];
 
 async function loadEmployees() {
 
     const response = await fetch(API_URL);
 
-    employees = await response.json();
+    employeesData = await response.json();
 
-    console.log(employees);
+    console.log("API Data:", employeesData);
 
     displayEmployees();
     updateDashboard();
@@ -207,19 +207,19 @@ function saveEmployee() {
 
 function displayEmployees(employeesToDisplay = null) {
 
-    let allEmployees = employees;
+    let allEmployees = employeesData;
 
-    let employees;
+    let employeeList;
 
     if (employeesToDisplay === null) {
-        employees = allEmployees.map((employee, index) => {
+        employeeList = allEmployees.map((employee, index) => {
             return {
                 employee: employee,
                 originalIndex: index
             };
         });
     } else {
-        employees = employeesToDisplay;
+        employeeList = employeesToDisplay;
     }
 
     let tableBody =
@@ -227,7 +227,7 @@ function displayEmployees(employeesToDisplay = null) {
 
     tableBody.innerHTML = "";
 
-    if (employees.length === 0) {
+    if (employeeList.length === 0) {
         tableBody.innerHTML = `
             <tr>
                 <td colspan="9" class="no-results">
@@ -239,7 +239,7 @@ function displayEmployees(employeesToDisplay = null) {
         return;
     }
 
-    employees.forEach(function (item) {
+    employeeList.forEach(function (item) {
 
         let emp = item.employee;
         let index = item.originalIndex;
