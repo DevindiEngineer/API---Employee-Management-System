@@ -5,6 +5,10 @@ let employees = [];
 async function loadEmployees() {
     const response = await fetch(API_URL);
     employees = await response.json();
+
+    console.log(employees);
+    
+
     displayEmployees();
     updateDashboard();
 }
