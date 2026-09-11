@@ -1,3 +1,5 @@
+const API_URL = "https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
+
 let department = document.getElementById("departments");
 let designation = document.getElementById("designations");
 
