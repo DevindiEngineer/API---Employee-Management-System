@@ -1,13 +1,15 @@
-const API_URL = "https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
+const API_URL =
+    "https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
 
 let employees = [];
 
 async function loadEmployees() {
+
     const response = await fetch(API_URL);
+
     employees = await response.json();
 
     console.log(employees);
-    
 
     displayEmployees();
     updateDashboard();
