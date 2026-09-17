@@ -1,24 +1,30 @@
 const API_URL =
-"https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
+    "https://6aa3100ae7ae868cdf7a91ce.mockapi.io/employees";
 
 let employeesData = [];
+let editingId = null;
 
 async function loadEmployees() {
+    try {
+        const response = await fetch(API_URL);
 
-    const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error("Failed to load employees");
+        }
 
-    employeesData = await response.json();
+        employeesData = await response.json();
 
-    console.log("API Data:", employeesData);
+        console.log("Employees loaded:", employeesData.length);
 
-    displayEmployees();
-    updateDashboard();
+        displayEmployees();
+        updateDashboard();
+    } catch (error) {
+        console.error("API loading error:", error);
+    }
 }
 
 let department = document.getElementById("departments");
 let designation = document.getElementById("designations");
-
-let editingIndex = null;
 
 department.onchange = function () {
 
@@ -79,130 +85,125 @@ department.onchange = function () {
 
 };
 
-function saveEmployee() {
+async function saveEmployee() {
+    const banner = document.getElementById("successBanner");
 
-    console.log("Current editing index:", editingIndex);
-
-    let banner = document.getElementById("successBanner");
-
+    const empName = document.getElementById("empName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("TP").value.trim();
+    const gender = document.getElementById("gender").value;
+    const DOJ = document.getElementById("DOJ").value;
+    const departments = document.getElementById("departments").value;
+    const designations = document.getElementById("designations").value;
+    console.log("Designation:", designations);
+    const types = document.getElementById("types").value;
+    const salary = document.getElementById("salary").value.trim();
 
     if (
-        document.getElementById("empName").value.trim() === "" ||
-        document.getElementById("email").value.trim() === "" ||
-        document.getElementById("TP").value.trim() === "" ||
-        document.getElementById("gender").value === "" ||
-        document.getElementById("DOJ").value === "" ||
-        document.getElementById("departments").value === "" ||
-        document.getElementById("designations").value === "" ||
-        document.getElementById("types").value === "" ||
-        document.getElementById("salary").value.trim() === ""
+        empName === "" ||
+        email === "" ||
+        phone === "" ||
+        gender === "" ||
+        DOJ === "" ||
+        departments === "" ||
+        designations === "" ||
+        designations === "Select Designation" ||
+        types === "" ||
+        salary === ""
     ) {
-
-        banner.innerHTML = "Please fill all fields";
-        banner.style.color = "red";
-        banner.style.display = "block";
-
-        setTimeout(() => {
-            banner.style.display = "none";
-        }, 1500);
-
+        showBanner("Please fill all fields", "red");
         return;
     }
 
-    let phone = document.getElementById("TP").value;
-
-    if (phone.length < 10) {
-
-        banner.innerHTML = "Phone number cannot be less than 10 digits";
-        banner.style.display = "block";
-        banner.style.color = "red";
-        return;
-    }
-
-    if (phone.length > 10) {
-
-        banner.innerHTML = "Phone number cannot exceed 10 digits";
-        banner.style.display = "block";
-        banner.style.color = "red";
+    if (phone.length !== 10) {
+        showBanner("Phone number must contain exactly 10 digits", "red");
         return;
     }
 
     if (!phone.startsWith("07")) {
-
-        banner.innerHTML = "Phone number must start with 07";
-        banner.style.display = "block";
-        banner.style.color = "red";
+        showBanner("Phone number must start with 07", "red");
         return;
     }
 
     const employee = {
-        empName: document.getElementById("empName").value,
-        email: document.getElementById("email").value,
+        empName: empName,
+        email: email,
         TP: phone,
-        gender: document.getElementById("gender").value,
-        DOJ: document.getElementById("DOJ").value,
-        departments: document.getElementById("departments").value,
-        designations: document.getElementById("designations").value,
-        types: document.getElementById("types").value,
-        salary: document.getElementById("salary").value,
+        gender: gender,
+        DOJ: DOJ,
+        departments: departments,
+        designations: designations,
+        types: types,
+        salary: Number(salary)
+    };
+
+    try {
+        let response;
+
+        if (editingId === null) {
+            response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(employee)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to add employee");
+            }
+
+            showBanner("Saved Successfully!", "green");
+        } else {
+
+            console.log("editingId =", editingId);
+
+            const response = await fetch(
+                `${API_URL}/${editingId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(employee)
+                }
+            );
+
+            console.log("PUT status:", response.status);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.log(errorText);
+                throw new Error(errorText);
+            }
+
+            showBanner("Updated Successfully!", "green");
+
+            await loadEmployees();
+
+            resetForm();
+
+            return;
+        }
+
+        resetForm();
+        await loadEmployees();
+    } catch (error) {
+        console.error(error);
+        alert(error.message);
     }
+}
 
-    console.log(employee);
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+function showBanner(message, color) {
+    const banner = document.getElementById("successBanner");
 
-
-    console.log("Saving. editingIndex =", editingIndex);
-
-    if (editingIndex == null) {
-
-        // Add a new employee
-        employees.push(employee);
-
-        banner.innerHTML = "Saved Successfully!";
-
-    } else {
-
-        // Update the selected employee
-        employees[editingIndex] = employee;
-
-        banner.innerHTML = "Updated Successfully!";
-
-        editingIndex = null;
-
-        document.getElementById("saveButton").innerText =
-            "Save Employee";
-    }
-
-    banner.style.color = "green";
+    banner.innerHTML = message;
+    banner.style.color = color;
     banner.style.display = "block";
 
-    setTimeout(() => {
+    setTimeout(function () {
         banner.style.display = "none";
     }, 1500);
-
-    document.getElementById("empName").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("TP").value = "";
-    document.getElementById("gender").value = "";
-    document.getElementById("DOJ").value = "";
-    document.getElementById("departments").value = "";
-    document.getElementById("designations").innerHTML =
-        '<option value="">Select Designation</option>';
-    document.getElementById("types").value = "";
-    document.getElementById("salary").value = "";
-
-    banner.style.display = "block";
-
-    localStorage.setItem(
-        "employees",
-        JSON.stringify(employees)
-
-    );
-
-    displayEmployees();
-    updateDashboard();
-
 }
 
 function displayEmployees(employeesToDisplay = null) {
@@ -293,18 +294,18 @@ function displayEmployees(employeesToDisplay = null) {
                     <button
                         type="button"
                         class="edit-btn"
-                        onclick="editEmployee(${index})"
+                        onclick="editEmployee('${emp.id}')"
                     >
                         Edit
                     </button>
 
                     <button
-                        type="button"
-                        class="delete-btn"
-                        onclick="deleteEmployee(${index})"
-                    >
-                        Delete
-                    </button>
+    type="button"
+    class="delete-btn"
+    onclick="deleteEmployee('${emp.id}')"
+>
+    Delete
+</button>
 
                 </td>
             </tr>
@@ -317,8 +318,7 @@ loadEmployees();
 
 function updateDashboard() {
 
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+    let employees = employeesData;
 
     document.getElementById("totalEmployees").innerHTML =
         employees.length;
@@ -369,38 +369,50 @@ function updateDashboard() {
         "Rs. " + averageSalary.toLocaleString();
 }
 
-function deleteEmployee(index) {
-
-    let answer = confirm(
+async function deleteEmployee(id) {
+    const answer = confirm(
         "Are you sure you want to delete this employee?"
     );
 
-    if (answer) {
+    if (!answer) {
+        return;
+    }
 
-        let employees =
-            JSON.parse(localStorage.getItem("employees")) || [];
+    try {
+        console.log("Deleting employee ID:", id);
 
-        employees.splice(index, 1);
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: "DELETE"
+        });
 
-        localStorage.setItem(
-            "employees",
-            JSON.stringify(employees)
-        );
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(
+                `Delete failed: ${response.status} ${errorText}`
+            );
+        }
 
-        loadEmployees();
+        showBanner("Deleted Successfully!", "green");
+
+        await loadEmployees();
+    } catch (error) {
+        console.error("Delete error:", error);
+        showBanner("Could not delete employee", "red");
     }
 }
 
-function editEmployee(index) {
 
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
+function editEmployee(id) {
+    const employee = employeesData.find(function (emp) {
+        return String(emp.id) === String(id);
+    });
 
-    let employee = employees[index];
+    if (!employee) {
+        showBanner("Employee could not be found", "red");
+        return;
+    }
 
-    editingIndex = Number(index);
-
-    console.log("Edit clicked:", editingIndex);
+    editingId = employee.id;
 
     document.getElementById("empName").value =
         employee.empName;
@@ -420,11 +432,13 @@ function editEmployee(index) {
     document.getElementById("departments").value =
         employee.departments;
 
-    // Load the correct designations for that department
     department.onchange();
 
-    document.getElementById("designations").value =
-        employee.designations;
+    setTimeout(() => {
+        document.getElementById("designations").value =
+            employee.designations;
+    }, 100);
+
 
     document.getElementById("types").value =
         employee.types;
@@ -435,7 +449,6 @@ function editEmployee(index) {
     document.getElementById("saveButton").innerText =
         "Update Employee";
 
-    // Move to the form
     document.querySelector("form").scrollIntoView({
         behavior: "smooth"
     });
@@ -455,30 +468,24 @@ function resetForm() {
     document.getElementById("types").value = "";
     document.getElementById("salary").value = "";
 
-    editingIndex = null;
+    editingId = null;
 
     document.getElementById("saveButton").innerText =
         "Save Employee";
 }
 
 function applyFilters() {
-
-    let employees =
-        JSON.parse(localStorage.getItem("employees")) || [];
-
-    let searchText =
+    const searchText =
         document.getElementById("searchEmployee")
-            .value
-            .trim()
-            .toLowerCase();
+            .value.trim().toLowerCase();
 
-    let selectedDepartment =
+    const selectedDepartment =
         document.getElementById("filterDepartment").value;
 
-    let selectedType =
+    const selectedType =
         document.getElementById("filterType").value;
 
-    let filteredEmployees = employees
+    const filteredEmployees = employeesData
         .map(function (employee, index) {
             return {
                 employee: employee,
@@ -486,24 +493,23 @@ function applyFilters() {
             };
         })
         .filter(function (item) {
+            const emp = item.employee;
 
-            let emp = item.employee;
+            const employeeName =
+                String(emp.empName || "").toLowerCase();
 
-            let employeeName =
-                emp.empName.toLowerCase();
+            const employeeEmail =
+                String(emp.email || "").toLowerCase();
 
-            let employeeEmail =
-                emp.email.toLowerCase();
-
-            let matchesSearch =
+            const matchesSearch =
                 employeeName.includes(searchText) ||
                 employeeEmail.includes(searchText);
 
-            let matchesDepartment =
+            const matchesDepartment =
                 selectedDepartment === "" ||
                 emp.departments === selectedDepartment;
 
-            let matchesType =
+            const matchesType =
                 selectedType === "" ||
                 emp.types === selectedType;
 
