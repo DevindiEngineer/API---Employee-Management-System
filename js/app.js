@@ -5,6 +5,9 @@ let employeesData = [];
 let editingId = null;
 
 async function loadEmployees() {
+
+    console.log(employeesData[0]);
+
     try {
         const response = await fetch(API_URL);
 
@@ -159,7 +162,7 @@ async function saveEmployee() {
             console.log("editingId =", editingId);
 
             const response = await fetch(
-                `${API_URL}/${editingId}`,
+                `${API_URL}/${employeesData[editingId].id}`,
                 {
                     method: "PUT",
                     headers: {
@@ -266,6 +269,8 @@ function displayEmployees(employeesToDisplay = null) {
             rowClass = "legal-row";
         }
 
+        console.log(emp.id, emp.empName);
+
         tableBody.innerHTML += `
             <tr class="${rowClass}">
                 <td>${emp.empName}</td>
@@ -294,7 +299,7 @@ function displayEmployees(employeesToDisplay = null) {
                     <button
                         type="button"
                         class="edit-btn"
-                        onclick="editEmployee('${emp.id}')"
+                        onclick="editEmployee(${index})"
                     >
                         Edit
                     </button>
@@ -302,7 +307,7 @@ function displayEmployees(employeesToDisplay = null) {
                     <button
     type="button"
     class="delete-btn"
-    onclick="deleteEmployee('${emp.id}')"
+    onclick="deleteEmployee(${index})"
 >
     Delete
 </button>
@@ -402,17 +407,11 @@ async function deleteEmployee(id) {
 }
 
 
-function editEmployee(id) {
-    const employee = employeesData.find(function (emp) {
-        return String(emp.id) === String(id);
-    });
+function editEmployee(index) {
 
-    if (!employee) {
-        showBanner("Employee could not be found", "red");
-        return;
-    }
+    const employee = employeesData[index];
 
-    editingId = employee.id;
+    editingId = index;
 
     document.getElementById("empName").value =
         employee.empName;
@@ -439,7 +438,6 @@ function editEmployee(id) {
             employee.designations;
     }, 100);
 
-
     document.getElementById("types").value =
         employee.types;
 
@@ -448,10 +446,6 @@ function editEmployee(id) {
 
     document.getElementById("saveButton").innerText =
         "Update Employee";
-
-    document.querySelector("form").scrollIntoView({
-        behavior: "smooth"
-    });
 }
 
 function resetForm() {
