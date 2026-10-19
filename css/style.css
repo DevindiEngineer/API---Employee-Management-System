@@ -7,8 +7,8 @@ html {
 }
 
 body {
+    margin: 0;
     background-color: rgb(164, 201, 225);
-    padding-bottom: 80px;
 }
 
 /* ---------- Headings ---------- */
@@ -26,26 +26,29 @@ h2 {
 /* ---------- Banner ---------- */
 .banner {
     position: relative;
+    /* the title is placed inside this box */
+    width: 100%;
+    overflow: hidden;
 }
 
-.banner p {
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
+.banner img {
+    width: 100%;
+    height: clamp(180px, 22vw, 480px);
+    object-fit: cover;
+    object-position: right;
+    display: block;
 }
 
 .title {
     position: absolute;
-    top: 35%;
-    left: 100px;
+    /* puts the text ON the picture */
+    top: 50%;
+    left: 5%;
     transform: translateY(-50%);
+    margin: 0;
     text-align: left;
-    color: rgb(76, 37, 248);
-}
-
-.banner h1 {
+    line-height: 1.1;
+    font-size: clamp(28px, 4.5vw, 110px);
     color: #2915db;
     text-shadow:
         0 0 5px #00ffff,
@@ -69,10 +72,9 @@ input[type="number"] {
 /* ---------- Form ---------- */
 form {
     width: 90%;
-    min-height: 400px;
-    height: auto;
     margin: 30px auto;
     padding: 40px;
+    box-sizing: border-box;
     background: rgb(194, 220, 232);
     border: 3px solid navy;
     border-radius: 20px;
@@ -234,24 +236,24 @@ tbody tr:hover {
     border-radius: 6px;
 }
 
-td.department-cell.eng-row{
-    background-color:#b8abe9 !important;
+td.department-cell.eng-row {
+    background-color: #b8abe9 !important;
 }
 
-td.department-cell.sales-row{
-    background-color:#94df9a !important;
+td.department-cell.sales-row {
+    background-color: #94df9a !important;
 }
 
-td.department-cell.finance-row{
-    background-color:#e0c859 !important;
+td.department-cell.finance-row {
+    background-color: #e0c859 !important;
 }
 
-td.department-cell.hr-row{
-    background-color:#ebb5d9 !important;
+td.department-cell.hr-row {
+    background-color: #ebb5d9 !important;
 }
 
-td.department-cell.legal-row{
-    background-color:#ec8484 !important;
+td.department-cell.legal-row {
+    background-color: #ec8484 !important;
 }
 
 
@@ -286,11 +288,12 @@ td.department-cell.legal-row{
     color: #dceeff;
 }
 
-.dashboard-card {
+/* Card hover lift */
+.card {
     transition: transform 0.3s;
 }
 
-.dashboard-card:hover {
+.card:hover {
     transform: translateY(-5px);
 }
 
@@ -377,26 +380,20 @@ td.department-cell.legal-row{
 
 /* Mobile */
 @media screen and (max-width: 768px) {
-    h1 {
-        font-size: 40px;
+    .banner img {
+        height: 180px;
+    }
+
+    .title {
+        font-size: 28px;
+        left: 15px;
     }
 
     h2 {
         font-size: 28px;
     }
 
-    .banner img {
-        height: 220px;
-        object-fit: cover;
-    }
-
-    .title {
-        left: 20px;
-        top: 50%;
-    }
-
     form {
-        height: auto;
         padding: 20px;
     }
 
@@ -441,13 +438,138 @@ td.department-cell.legal-row{
     }
 }
 
-/* Small mobile */
-@media screen and (max-width: 600px) {
-    .filter-panel {
-        grid-template-columns: 1fr;
+/* Large desktop screens */
+@media screen and (min-width: 1600px) {
+
+    .field {
+        width: 30%;
     }
 
-    .clear-filter-btn {
-        width: 100%;
+    .field label {
+        width: 40%;
+        min-width: 0;
+        font-size: 24px;
     }
+
+    .field input,
+    .field select {
+        width: 60%;
+        height: 50px;
+        font-size: 20px;
+    }
+
+    #saveButton {
+        font-size: 24px;
+        padding: 15px 45px;
+    }
+}
+
+/* ---------- Delete confirm pop-up ---------- */
+.confirm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.confirm-card {
+    background: rgb(194, 220, 232);
+    border: 3px solid navy;
+    border-radius: 15px;
+    padding: 30px 40px;
+    text-align: center;
+    max-width: 90%;
+}
+
+.confirm-card p {
+    color: rgb(14, 14, 80);
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.confirm-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.confirm-yes {
+    background: #dc3545;
+}
+
+.confirm-yes:hover {
+    background: #b02a37;
+}
+
+.confirm-no {
+    background: navy;
+}
+
+.confirm-no:hover {
+    background: #2915db;
+}
+
+/* ---------- Footer ---------- */
+.footer {
+    margin-top: 60px;
+    background: rgb(8, 6, 77);
+    color: #dceeff;
+    text-align: center;
+    padding: 30px 20px;
+    border-top: 4px solid #00ffff;
+}
+
+.footer h3 {
+    font-size: 30px;
+    margin: 0 0 15px;
+    color: white;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    color: #dceeff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.footer-links a:hover {
+    color: #00ffff;
+    text-decoration: underline;
+}
+
+.top-btn {
+    font-size: 22px;
+    padding: 10px 25px;
+    background: #2915db;
+    margin-bottom: 15px;
+}
+
+.top-btn:hover {
+    background: #0d6efd;
+}
+
+.footer p {
+    margin: 5px 0;
+    font-size: 24px;
+}
+
+.footer-small {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+form.edit-highlight {
+    box-shadow: 0 0 25px 5px #00ffff;
+    transition: box-shadow 0.3s;
 }

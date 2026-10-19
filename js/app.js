@@ -305,12 +305,12 @@ function displayEmployees(employeesToDisplay = null) {
                     </button>
 
                     <button
-    type="button"
-    class="delete-btn"
-    onclick="deleteEmployee(${index})"
->
-    Delete
-</button>
+                        type="button"
+                        class="delete-btn"
+                        onclick="deleteEmployee('${emp.id}')"
+                    >
+                        Delete
+                    </button>
 
                 </td>
             </tr>
@@ -374,35 +374,49 @@ function updateDashboard() {
         "Rs. " + averageSalary.toLocaleString();
 }
 
-async function deleteEmployee(id) {
-    const answer = confirm(
-        "Are you sure you want to delete this employee?"
-    );
+// Show our own pop-up and wait for Yes or Cancel
+function askConfirm() {
+    return new Promise(function (resolve) {
+        const box = document.getElementById("confirmBox");
+        box.style.display = "flex";
 
+        document.getElementById("confirmYes").onclick = function () {
+            box.style.display = "none";
+            resolve(true);
+        };
+
+        document.getElementById("confirmNo").onclick = function () {
+            box.style.display = "none";
+            resolve(false);
+        };
+    });
+}
+
+async function deleteEmployee(id) {
+
+    // Cancel = nothing changes
+    const answer = await askConfirm();
     if (!answer) {
         return;
     }
 
+    // Yes = delete the employee
     try {
-        console.log("Deleting employee ID:", id);
-
-        const response = await fetch(`${API_URL}/${id}`, {
+        await fetch(`${API_URL}/${id}`, {
             method: "DELETE"
         });
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(
-                `Delete failed: ${response.status} ${errorText}`
-            );
+        if (editingId !== null && employeesData[editingId] &&
+            employeesData[editingId].id === id) {
+            resetForm();
         }
 
         showBanner("Deleted Successfully!", "green");
 
         await loadEmployees();
+
     } catch (error) {
-        console.error("Delete error:", error);
-        showBanner("Could not delete employee", "red");
+        console.error(error);
     }
 }
 
@@ -446,6 +460,15 @@ function editEmployee(index) {
 
     document.getElementById("saveButton").innerText =
         "Update Employee";
+
+        document.getElementById("formTitle").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+    const form = document.querySelector("form");
+    form.classList.add("edit-highlight");
+    setTimeout(() => form.classList.remove("edit-highlight"), 1500);
 }
 
 function resetForm() {
@@ -527,3 +550,5 @@ function clearFilters() {
 
     displayEmployees();
 }
+
+document.getElementById("year").textContent = new Date().getFullYear();
