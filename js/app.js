@@ -352,7 +352,7 @@ function updateDashboard() {
 
     let traineeCount =
         employees.filter(emp =>
-            emp.types === "Trainee/Intern"
+            emp.types === "Intern"
         ).length;
 
     document.getElementById("traineeEmployees").innerHTML =
