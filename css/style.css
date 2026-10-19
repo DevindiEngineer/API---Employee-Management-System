@@ -438,6 +438,38 @@ td.department-cell.legal-row {
     }
 }
 
+/* Laptop screens: make the table fit */
+@media screen and (max-width: 1599px) {
+
+    .table-container {
+        width: 90%;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    th {
+        font-size: 18px;
+        padding: 14px 8px;
+    }
+
+    td {
+        font-size: 16px;
+        padding: 10px 8px;
+        word-break: break-word;
+    }
+
+    .action-cell {
+        width: 110px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        width: 80px;
+        height: 32px;
+        font-size: 14px;
+    }
+}
+
 /* Large desktop screens */
 @media screen and (min-width: 1600px) {
 
